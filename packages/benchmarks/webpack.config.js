@@ -1,6 +1,8 @@
 const babelPreset = require('../../scripts/babel/preset');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
+const StylexPlugin = require('webpack-plugin-stylex');
+const stylexBabelPlugin = require('babel-plugin-transform-stylex');
 
 const appDirectory = path.resolve(__dirname);
 
@@ -38,7 +40,9 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             cacheDirectory: false,
-            presets: [babelPreset]
+            presets: [babelPreset],
+            plugins: [[stylexBabelPlugin, { dev: false }]],
+            metadataSubscribers: [StylexPlugin.stylexMetadataSubscription]
           }
         }
       }
@@ -48,6 +52,9 @@ module.exports = {
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       openAnalyzer: false
+    }),
+    new StylexPlugin({
+      filename: 'atomic.css'
     })
   ],
   resolve: {
